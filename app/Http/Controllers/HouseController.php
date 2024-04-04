@@ -97,15 +97,17 @@ class HouseController extends Controller
 
     public function destroy(House $house): RedirectResponse
     {
-        $property = $house->property;
-        if ($property) {
-            // Delete the Property first to avoid referential integrity issues
-            $property->delete();
+        try {
+            $property = $house->property;
+            if ($property) {
+                $house->delete();
+                $property->delete();
+            } else {
+                $house->delete();
+            }
+            return redirect()->route('house.index')->with('success', 'House and associated property deleted successfully!');
+        } catch (\Exception $e) {
+            return back()->withErrors('error', 'Error deleting house and property.');
         }
-
-        $house->delete();
-
-        return redirect()->route('houses.index')->with('success', 'House and associated property deleted successfully!');
     }
-
 }
