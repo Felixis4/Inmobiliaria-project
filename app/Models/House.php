@@ -12,9 +12,5 @@ class House extends Model
     protected $table = "houses";
     protected $fillable = ['title','description','price','total_area','covered_area','rooms_number'];
 
-    public function property()
-    {
-        return $this->hasOne(Property::class);
-    }
 
 }

@@ -11,11 +11,11 @@ class Property extends Model
     use HasFactory;
 
     protected $table = "properties";
-    protected $fillable = ['type','description','property_id'];
+    protected $fillable = ['type','description','house_id'];
 
     public function house()
     {
-        return $this->belongsTo(House::class);
+        return $this->belongsTo(House::class, 'house_id');
     }
 }
 

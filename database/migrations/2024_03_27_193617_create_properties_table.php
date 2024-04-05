@@ -13,10 +13,12 @@ return new class extends Migration
     {
         Schema::create('properties', function (Blueprint $table) {
             $table->id();
-            $table->integer('property_id');
+            $table->unsignedBigInteger('house_id');
             $table->string('type');
             $table->string('description');
             $table->timestamps();
+
+            $table->foreign('house_id')->references('id')->on('houses')->onDelete('cascade');
         });
     }
 

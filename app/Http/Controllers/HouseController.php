@@ -42,13 +42,11 @@ class HouseController extends Controller
         $house->rooms_number = $validated['rooms_number'];
         $house->save();
 
-        $property = Property::create([
-            'description' => $validated['description'],
-            'type' => 'house',
-            'property_id' => $house->id
-        ]);
-
-
+        $property = new Property();
+        $property->house_id = $house->id;
+        $property->type = 'house';
+        $property->description = $house->description;
+        $property->save();
 
         return redirect()->route('house.index')->with('success', 'House listed successfully!');
     }
@@ -84,12 +82,10 @@ class HouseController extends Controller
         ]);
 
 
-        $property = $house->property;
+        $property = Property::where('house_id', $house->id)->first();
         if ($property) {
-            $property->update([
-                'description' => $validated['description'],
-                'type' => 'house',
-            ]);
+            $property->description = $house->description;
+            $property->save();
         }
 
         return redirect()->route('house.index')->with('success', 'House updated successfully!');
@@ -97,17 +93,12 @@ class HouseController extends Controller
 
     public function destroy(House $house): RedirectResponse
     {
-        try {
-            $property = $house->property;
-            if ($property) {
-                $house->delete();
-                $property->delete();
-            } else {
-                $house->delete();
-            }
-            return redirect()->route('house.index')->with('success', 'House and associated property deleted successfully!');
-        } catch (\Exception $e) {
-            return back()->withErrors('error', 'Error deleting house and property.');
+        $property = Property::where('house_id', $house->id)->first();
+        if ($property) {
+            $property->delete();
         }
+        $house->delete();
+
+        return redirect()->route('house.index')->with('success', 'House and associated property deleted successfully!');
     }
 }
