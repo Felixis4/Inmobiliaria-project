@@ -2,6 +2,7 @@
 
 ## Dependences 
 - PHP 8
+- composer
 - Laravel 
 - artisan 
 
