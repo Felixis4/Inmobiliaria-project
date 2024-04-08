@@ -7,6 +7,8 @@ use App\Models\Property;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Session;
+
 
 class HouseController extends Controller
 {
@@ -32,6 +34,8 @@ class HouseController extends Controller
             'covered_area' => 'required|numeric',
             'rooms_number' => 'required|integer',
         ]);
+        $propertyData = Session::get('propertyData', []);    
+
 
         $house = new House();
         $house->title = $validated['title'];
@@ -45,8 +49,11 @@ class HouseController extends Controller
         $property = new Property();
         $property->house_id = $house->id;
         $property->type = 'house';
+        $property->city_id = $propertyData['city_id'];
         $property->description = $house->description;
         $property->save();
+
+        Session::forget('propertyData');
 
         return redirect()->route('house.index')->with('success', 'House listed successfully!');
     }

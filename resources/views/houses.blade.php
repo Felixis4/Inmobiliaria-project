@@ -11,7 +11,7 @@
     @endif
     <h1 class="text-2xl font-bold my-4">Houses List</h1>
     <div class="mb-4">
-        <a href="{{ route('house.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+        <a href="{{ route('properties.create') }}" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
             Add New House
         </a>
     </div>
