@@ -28,14 +28,13 @@ class HouseController extends Controller
     {
         $validated = $request->validate([
             'title' => 'required|max:255',
-            'description' => 'required',
+            'description' => 'required|string',
             'price' => 'required|numeric',
             'total_area' => 'required|numeric',
             'covered_area' => 'required|numeric',
             'rooms_number' => 'required|integer',
+            'city_id' => 'required'
         ]);
-        $propertyData = Session::get('propertyData', []);    
-
 
         $house = new House();
         $house->title = $validated['title'];
@@ -46,16 +45,16 @@ class HouseController extends Controller
         $house->rooms_number = $validated['rooms_number'];
         $house->save();
 
-        $property = new Property();
-        $property->house_id = $house->id;
-        $property->type = 'house';
-        $property->city_id = $propertyData['city_id'];
-        $property->description = $house->description;
+        $property = new Property([
+            'property_id' => $house->id,
+            'type' => 'house',
+            'city_id' => $validated['city_id'],
+            'description' => $house->description,
+        
+        ]);
         $property->save();
 
-        Session::forget('propertyData');
-
-        return redirect()->route('house.index')->with('success', 'House listed successfully!');
+        return redirect()->route('house.index')->with('success', 'House published successfully!');
     }
 
     public function show(House $house): View

@@ -2,20 +2,22 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 
 
 class Property extends Model
 {
-    use HasFactory;
-
     protected $table = "properties";
-    protected $fillable = ['type','description','house_id'];
+    protected $fillable = ['type','description','property_id','city_id'];
 
-    public function house()
+    public function propertyable(): MorphTo
     {
-        return $this->belongsTo(House::class, 'house_id');
+        return $this->morphTo(__FUNCTION__,'type','property_id');
+    }
+    public function city()
+    {
+        return $this->belongsTo(City::class);
     }
 }
 

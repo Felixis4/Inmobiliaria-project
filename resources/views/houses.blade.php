@@ -15,15 +15,6 @@
             Add New House
         </a>
     </div>
-    <div class="mb-4">
-        <a href="" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Add New Department
-        </a>
-    </div><div class="mb-4">
-        <a href="" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-            Add New Field
-        </a>
-    </div>
     @foreach ($houses as $house)
     <div class="flex justify-between items-center bg-white px-4 py-2 border-b">
         <div>{{ $house->title }}</div>

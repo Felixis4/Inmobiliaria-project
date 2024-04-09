@@ -5,6 +5,8 @@
     <h2 class="mb-6 text-2xl font-bold text-gray-900">Add a New House</h2>
     <form action="{{ route('house.store') }}" method="POST">
         @csrf
+        <input type="hidden" name="city_id" value="{{ request('city_id') }}">
+
         <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
                 Title

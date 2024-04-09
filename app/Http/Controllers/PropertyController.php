@@ -20,27 +20,17 @@ class PropertyController extends Controller
         return view('properties_selector', compact('cities', 'types'));
     }
 
-
-
-    
     public function store(Request $request)
     {
         $validated = $request->validate([
             'city_id' => 'required|exists:cities,id',
+            'type' => 'required',
         ]);
-        // Guardar datos del request en la sesión
-        Session::put('propertyData', $request->except('_token'));
     
-        // Redirigir al formulario correspondiente basado en el tipo de propiedad seleccionado
-        $type = $request->input('type');
-        if ($type === 'house') {
-            return redirect()->route('house.create');
-        } elseif ($type === 'department') {
-            return redirect()->route('department.create');
+        if ($request->input('type') === 'house') {
+            return redirect()->route($validated['type'].'.create',['city_id'=> $validated['city_id']]);
         }
-    
-        // Añadir manejo para tipos de propiedad no soportados o error
-        return back()->withError('Tipo de propiedad no soportado.');
+            return back()->withError('Tipo de propiedad no soportado.');
     }
     
 
