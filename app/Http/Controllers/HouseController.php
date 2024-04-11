@@ -7,21 +7,18 @@ use App\Models\Property;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Session;
-
 
 class HouseController extends Controller
 {
-
     public function index(): View
     {
         $houses = House::all();
-        return view('houses', compact('houses'));
+        return view('house.houses', compact('houses'));
     }
 
     public function create(): View
     {
-        return view('house');
+        return view('house.create');
     }
 
     public function store(Request $request): RedirectResponse
@@ -33,7 +30,7 @@ class HouseController extends Controller
             'total_area' => 'required|numeric',
             'covered_area' => 'required|numeric',
             'rooms_number' => 'required|integer',
-            'city_id' => 'required'
+            'city_id' => 'required|exists:cities,id'
         ]);
 
         $house = new House();
@@ -47,7 +44,7 @@ class HouseController extends Controller
 
         $property = new Property([
             'property_id' => $house->id,
-            'type' => 'house',
+            'type' => House::class,
             'city_id' => $validated['city_id'],
             'description' => $house->description,
         
@@ -59,12 +56,12 @@ class HouseController extends Controller
 
     public function show(House $house): View
     {
-        return view('house_show', compact('house'));
+        return view('house.show', compact('house'));
     }
 
     public function edit(House $house): View
     {
-        return view('house_edit', compact('house'));
+        return view('house.edit', compact('house'));
     }
 
     public function update(Request $request, House $house): RedirectResponse
@@ -88,7 +85,7 @@ class HouseController extends Controller
         ]);
 
 
-        $property = Property::where('house_id', $house->id)->first();
+        $property = $house->property;
         if ($property) {
             $property->description = $house->description;
             $property->save();
@@ -97,12 +94,15 @@ class HouseController extends Controller
         return redirect()->route('house.index')->with('success', 'House updated successfully!');
     }
 
-    public function destroy(House $house): RedirectResponse
+    public function destroy($id): RedirectResponse
     {
-        $property = Property::where('house_id', $house->id)->first();
+        $house = House::findOrFail($id);
+        
+        $property = $house->property;
         if ($property) {
             $property->delete();
         }
+    
         $house->delete();
 
         return redirect()->route('house.index')->with('success', 'House and associated property deleted successfully!');

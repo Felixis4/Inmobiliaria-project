@@ -20,5 +20,3 @@ class Property extends Model
         return $this->belongsTo(City::class);
     }
 }
-
-

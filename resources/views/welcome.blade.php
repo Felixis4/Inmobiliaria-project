@@ -6,11 +6,6 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <title>@yield('title', 'Home')</title>
-    <style>
-        body{
-
-            }
-    </style>
 </head>
 <body class="bg-gray-600 flex items-center justify-center h-1/2">
     @yield('content')

@@ -20,14 +20,11 @@ Route::get('/', function () {
 });
 
 Route::get('/houses', function () {
-    return view('houses');
+    return view('house.houses');
 });
 
 Route::get('/properties/create', [PropertyController::class, 'create'])->name('properties.create');
-
 Route::post('/properties', [PropertyController::class, 'store'])->name('properties.store');
-
-
 
 Route::resource('house', HouseController::class);
 
