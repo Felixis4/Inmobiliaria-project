@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\House;
 use App\Models\Property;
+use App\Models\Feature;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -18,7 +19,8 @@ class HouseController extends Controller
 
     public function create(): View
     {
-        return view('house.create');
+        $features = Feature::all();
+        return view('house.create', compact('features'));
     }
 
     public function store(Request $request): RedirectResponse
@@ -30,7 +32,10 @@ class HouseController extends Controller
             'total_area' => 'required|numeric',
             'covered_area' => 'required|numeric',
             'rooms_number' => 'required|integer',
-            'city_id' => 'required|exists:cities,id'
+            'city_id' => 'required|exists:cities,id',
+            'features' => 'sometimes|array',
+            'features.*' => 'exists:features,id',
+
         ]);
 
         $house = new House();
@@ -42,12 +47,16 @@ class HouseController extends Controller
         $house->rooms_number = $validated['rooms_number'];
         $house->save();
 
+        if ($request->has('features')) {
+            $house->features()->attach($request->features);
+        }
+
         $property = new Property([
             'property_id' => $house->id,
             'type' => House::class,
             'city_id' => $validated['city_id'],
             'description' => $house->description,
-        
+
         ]);
         $property->save();
 
@@ -61,7 +70,8 @@ class HouseController extends Controller
 
     public function edit(House $house): View
     {
-        return view('house.edit', compact('house'));
+        $features = Feature::all();
+        return view('house.edit', compact('house','features'));
     }
 
     public function update(Request $request, House $house): RedirectResponse
@@ -73,6 +83,9 @@ class HouseController extends Controller
             'total_area' => 'required|numeric',
             'covered_area' => 'required|numeric',
             'rooms_number' => 'required|integer',
+            'features' => 'sometimes|array',
+            'features.*' => 'exists:features,id',
+
         ]);
 
 
@@ -91,18 +104,24 @@ class HouseController extends Controller
             $property->save();
         }
 
+        if ($request->has('features')) {
+            $house->features()->sync($request->features);
+        } else {
+            $house->features()->detach();  // Detach all features if none are provided
+        }
+
         return redirect()->route('house.index')->with('success', 'House updated successfully!');
     }
 
     public function destroy($id): RedirectResponse
     {
         $house = House::findOrFail($id);
-        
+
         $property = $house->property;
         if ($property) {
             $property->delete();
         }
-    
+
         $house->delete();
 
         return redirect()->route('house.index')->with('success', 'House and associated property deleted successfully!');

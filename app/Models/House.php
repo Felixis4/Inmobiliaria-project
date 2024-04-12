@@ -16,4 +16,9 @@ class House extends Model
         return $this->morphOne(Property::class,'propertyable','type','property_id');
     }
 
+    public function features()
+    {
+        return $this->morphToMany(Feature::class, 'featureable');
+    }
+
 }

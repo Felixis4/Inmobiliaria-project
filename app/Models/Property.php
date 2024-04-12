@@ -15,6 +15,7 @@ class Property extends Model
     {
         return $this->morphTo(__FUNCTION__,'type','property_id');
     }
+
     public function city()
     {
         return $this->belongsTo(City::class);
