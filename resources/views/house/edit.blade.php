@@ -3,9 +3,18 @@
 @section('content')
 <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
     <h2 class="mb-6 text-2xl font-bold text-gray-900">Add a New House</h2>
-    <form action="{{ route('house.update', $house) }}" method="POST">
+    <form action="{{ route('house.update', $house) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
+        @if ($errors->any())
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4" role="alert">
+                <ul class="list-disc list-inside text-sm text-red-600">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
         <div class="mb-4">
             <label class="block text-gray-700 text-sm font-bold mb-2" for="title">
                 Title
@@ -65,15 +74,43 @@
                 <p class="text-red-500 text-xs italic">{{ $message }}</p>
             @enderror
         </div>
+        <div>
+            <h3 class="text-lg font-medium text-gray-900">
+                Features:
+            </h3>
+            <ul>
+                @foreach(['light', 'natural_gas', 'phone', 'water', 'sewers', 'internet', 'asphalt'] as $feature)
+                <li>
+                    <label for="{{ $feature }}">{{ str_replace('_',' ',ucfirst($feature)) }}:</label>
+                    <input type="hidden" name="{{ $feature }}" value="0">
+                    <input type="checkbox" name="{{ $feature }}" value="1" @checked(old($feature, $property->$feature))>
+                </li>
+                @endforeach
+            </ul>
+        </div>
 
-        @foreach($features as $feature)
-            <div class="flex items-center mb-2">
-                <input id="feature_{{ $feature->id }}" type="checkbox" class="mr-2"
-                    name="features[]" value="{{ $feature->id }}"
-                    {{ $house->features->contains($feature->id) ? 'checked' : '' }}>
-                <label for="feature_{{ $feature->id }}" class="text-sm text-gray-700">{{ $feature->name }}</label>
+        <div class="px-2 py-5 sm:px-2">
+            <h3 class="text-lg font-medium text-gray-900">House Images</h3>
+            <div class="mt-4 grid grid-cols-4 gap-4">
+                @foreach ($images as $image)
+                    <div class="relative">
+                        <img src="{{ Storage::url($image->path) }}" alt="House Image" class="rounded-lg">
+                    </div>
+                @endforeach
             </div>
-        @endforeach
+            <div class="my-4">
+                <label class="inline-block px-6 py-2.5 bg-orange-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-orange-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-orange-800 active:shadow-lg transition duration-150 ease-in-out">
+                    <span class="sr-only">Choose file</span>
+                    <input type="file" name="images[]" multiple class="hidden"
+                        onchange="document.getElementById('file-name').textContent = this.files.length > 1 ? this.files.length + ' files selected' : this.files[0].name">
+                        Upload Files
+                </label>
+                <span id="file-name" class="ml-2 text-sm font-medium text-black"></span>
+            </div>
+            <a href="{{ route('images.edit', $house->property->id) }}" class="inline-block px-6 py-2.5 bg-green-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-green-700 hover:shadow-lg focus:bg-green-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-green-800 active:shadow-lg transition duration-150 ease-in-out">
+                Edit Images
+            </a>
+        </div>
 
         <div class="flex items-center justify-between">
             <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" type="submit">

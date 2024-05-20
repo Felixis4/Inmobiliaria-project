@@ -17,12 +17,19 @@ class PropertyController extends Controller
         return view('properties_selector', compact('cities', 'types'));
     }
 
-    public function store(PropertyRequest $request): RedirectResponse
+    public function redirector(PropertyRequest $request): RedirectResponse
     {
-        if ($request->input('type') === 'house') {
-            return redirect()->route($request->validated(['type']).'.create',['city_id'=> $request->validated(['city_id'])]);
-        }
-            return back()->withError('Tipo de propiedad no soportado.');
+        return redirect()->route($request->validated(['type']).'.create',['city_id'=> $request->validated(['city_id'])]);
     }
+
+    public function store($property)
+    {
+        $property->save();
+    }
+
+    public function update($property)
+    {
+        $property->save();
+    }            
 }
 

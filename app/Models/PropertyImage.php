@@ -5,12 +5,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Feature extends Model
+class PropertyImage extends Model
 {
     use HasFactory;
 
-    public function properties()
-    {
-        return $this->morphedByMany(Property::class, 'featureable');
-    }
+    protected $table = 'property_images';
+    protected $fillable = ['property_id','path','mime_type'];
+
+
 }

@@ -28,6 +28,13 @@ class HouseUpdateRequest extends FormRequest
             'total_area' => 'required|numeric',
             'covered_area' => 'required|numeric',
             'rooms_number' => 'required|integer',
+            'light' => 'boolean',
+            'natural_gas' => 'boolean',
+            'phone' => 'boolean',
+            'water' => 'boolean',
+            'sewers' => 'boolean',
+            'internet' => 'boolean',
+            'asphalt' => 'boolean',
         ];
     }
 }

@@ -15,12 +15,29 @@
                 <p class="mt-1 text-sm text-gray-600">Rooms: {{ $house->rooms_number }}</p>
             </div>
             <div>
-                <h3 class="text-lg font-medium text-gray-900">Features</h3>
-                <ul class="list-disc pl-5">
-                    @foreach ($house->features as $feature)
-                        <li class="text-sm text-gray-600">{{ $feature->name }}</li>
+                <h3 class="text-lg font-medium text-gray-900">
+                    Features:
+                </h3>
+                <ul>
+                    @foreach(['light', 'natural_gas', 'phone', 'water', 'sewers', 'internet','asphalt'] as $feature)
+                        @if($house->property->$feature)
+                                <li class="block text-gray-700 text-sm font-bold mb-2">
+                                    - {{ str_replace('_',' ',ucfirst($feature)) }}
+                                </li>
+                        @endif
                     @endforeach
                 </ul>
+            </div>
+            <div class="px-4 py-5 sm:px-6">
+                @csrf
+                <h3 class="text-lg font-medium text-gray-900">House Images</h3>
+                <div class="mt-4 grid grid-cols-3 gap-4">
+                    @foreach ($images as $image)
+                        <div>
+                            <img src="{{ Storage::url($image->path) }}" alt="House Image" class="rounded-lg">
+                        </div>
+                    @endforeach
+                </div>
             </div>
         </div>
     </div>

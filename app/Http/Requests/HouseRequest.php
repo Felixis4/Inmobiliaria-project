@@ -29,8 +29,13 @@ class HouseRequest extends FormRequest
             'covered_area' => 'required|numeric',
             'rooms_number' => 'required|integer',
             'city_id' => 'required|exists:cities,id',
-            'features' => 'sometimes|array',
-            'features.*' => 'exists:features,id'
+            'light' => 'boolean',
+            'natural_gas' => 'boolean',
+            'phone' => 'boolean',
+            'water' => 'boolean',
+            'sewers' => 'boolean',
+            'internet' => 'boolean',
+            'asphalt' => 'boolean',
         ];
     }
 }
