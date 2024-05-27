@@ -185,4 +185,7 @@ return [
         // 'Example' => App\Facades\Example::class,
     ])->toArray(),
 
+    'PUBLIC_IMAGES_PATH' => 'public/images/',
+    'PUBLIC_PATH' => 'app/public/',
+
 ];

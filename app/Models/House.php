@@ -2,13 +2,13 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class House extends Model
 {
-
-    protected $table = "houses";
+    use HasFactory;
     protected $fillable = ['title','description','price','total_area','covered_area','rooms_number'];
 
     public function property():MorphOne

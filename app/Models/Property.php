@@ -10,7 +10,6 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 class Property extends Model
 {
     use HasFactory;
-    protected $table = "properties";
     protected $fillable = ['property_id','type','city_id','description','light','natural_gas','phone','water','sewers','internet','asphalt'];
     protected $casts = [
         'light' => 'boolean',
@@ -34,6 +33,6 @@ class Property extends Model
 
     public function images(): HasMany
     {
-        return $this->hasMany(PropertyImage::class, 'property_id','property_id');
+        return $this->hasMany(propertyImages::class, 'property_id','property_id');
     }
 }

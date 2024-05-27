@@ -3,7 +3,7 @@
 namespace App\Traits;
 
 use App\Http\Requests\ImageRequest;
-use App\Models\PropertyImage;
+use App\Models\propertyImages;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
@@ -11,7 +11,7 @@ trait Upload {
     public function uploadfile($propertyId, $images){
 
         $imageRequest = new ImageRequest();
-        $imageValidator = Validator::make(['images' => $images], $imageRequest->rules());
+        $imageValidator = Validator::make(['images.*' => $images], $imageRequest->rules());
 
         if ($imageValidator->fails()) {
             return redirect()->back()->withErrors($imageValidator);
@@ -21,24 +21,19 @@ trait Upload {
 
             $filename = Str::random(5).$image->getClientOriginalName();
 
-            $path = $image->storeAs('images/'.$propertyId,$filename,'public');
+            $path = $image->storeAs('images/'.$propertyId,$filename,config('filesystems.public'));
 
-            $fullPath = storage_path('app/public/'.$path);
+            $fullPath = storage_path(config('app.PUBLIC_PATH').$path);
 
             if (strtolower(pathinfo($fullPath, PATHINFO_EXTENSION)) == 'png') {
-                $im = imagecreatefrompng($fullPath);
-                imagepalettetotruecolor($im);
-                imagealphablending($im, true);
-                imagesavealpha($im, true);
-                $webp = imagewebp($im, str_replace(['.png','.PNG'], '.webp', $fullPath));
+                $webp = $this->PNGextension($fullPath);
             }
 
             if (strtolower(pathinfo($fullPath, PATHINFO_EXTENSION)) == 'jpg'||strtolower(pathinfo($fullPath, PATHINFO_EXTENSION)) == 'jpeg') {
-                $im = imagecreatefromjpeg($fullPath);
-                $webp = imagewebp($im, str_replace(['.jpg','.JPG','.jpeg','.JPEG',], '.webp', $fullPath));
+                $webp = $this->JPGextencion($fullPath);
             }
 
-            $propertyImage = new PropertyImage([
+            $propertyImage = new propertyImages([
                 $path = str_replace(['.jpg','.JPG','.jpeg','.JPEG','.png'], '.webp', $path),
                 'property_id' => $propertyId,
                 'path' => $path,
@@ -46,5 +41,19 @@ trait Upload {
             ]);
             $propertyImage->save();
         }
+    }
+    protected function PNGextension($fullPath){
+        $im = imagecreatefrompng($fullPath);
+        imagepalettetotruecolor($im);
+        imagealphablending($im, true);
+        imagesavealpha($im, true);
+        $webp = imagewebp($im, str_replace(['.png','.PNG'], '.webp', $fullPath));
+        return $webp;
+    }
+
+    protected function JPGextencion($fullPath){
+        $im = imagecreatefromjpeg($fullPath);
+        $webp = imagewebp($im, str_replace(['.jpg','.JPG','.jpeg','.JPEG',], '.webp', $fullPath));
+        return $webp;
     }
 }

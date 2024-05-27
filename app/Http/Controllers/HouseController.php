@@ -9,6 +9,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\HouseRequest;
 use App\Http\Requests\HouseUpdateRequest;
 use App\Traits\Upload;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
 class HouseController extends Controller
@@ -17,6 +18,7 @@ class HouseController extends Controller
     public function index(): View
     {
         $houses = House::all();
+        
         return view('house.houses', compact('houses'));
     }
 
@@ -30,6 +32,7 @@ class HouseController extends Controller
         $house = House::create($request->validated());
 
         $property = new Property([
+            $request->validated(),
             'property_id' => $house->id,
             'type' => House::class,
             'city_id' => $request->validated(['city_id']),
@@ -44,7 +47,7 @@ class HouseController extends Controller
         ]);
 
        if ($request->hasFile('images')){
-        $images = $request->file('images');
+        $images = $request->images;
         $propertyId = $property->property_id;
         $this->uploadfile($propertyId, $images);
        }
@@ -111,11 +114,11 @@ class HouseController extends Controller
             $propertyImages = $property->images;
             if ($propertyImages){
                 foreach($propertyImages as $propertyImage){
-                $directory = Storage::allFiles('public/images/'.$propertyImage->property_id);
+                $directory = Storage::allFiles(config('app.PUBLIC_IMAGES_PATH').$propertyImage->property_id);
                 Storage::delete($directory);
                 $propertyImage->delete();
                 }
-                $directoryPath = 'public/images/'.$property->property_id;
+                $directoryPath = config('app.PUBLIC_IMAGES_PATH').$property->property_id;
                 Storage::deleteDirectory($directoryPath);
             }
             $property->delete();

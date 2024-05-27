@@ -22,7 +22,7 @@ class ImageRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'images' => 'image|mimes:jpeg,png,jpg,svg,webp',
+            'images.*' => 'image|mimes:jpeg,png,jpg,svg,webp',
         ];
     }
 }

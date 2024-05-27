@@ -24,9 +24,8 @@
             Add New House
         </a>
     </div>
-    @foreach ($houses as $house)
+    @forelse ($houses as $house)
     <div class="flex justify-between m-2 rounded items-center bg-white px-4 py-2 border-b">
-        <!-- Clickable title that redirects to the house's detail page -->
         <div>
             <a href="{{ url('/house/' . $house->id) }}" class="text-blue-600 hover:text-blue-800">{{ $house->title }}</a>
         </div>
@@ -39,6 +38,12 @@
             </form>
         </div>
     </div>
-    @endforeach
+    @empty
+    <div class="flex justify-between m-2 rounded items-center bg-white px-4 py-2 border-b">
+        <td>
+            No Houses Found
+        </td>
+    </div>
+    @endforelse
 </div>
 @endsection
