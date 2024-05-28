@@ -2,7 +2,6 @@
 
 namespace Tests\Feature;
 
-use App\Models\City;
 use App\Models\House;
 use App\Models\Property;
 use Illuminate\Foundation\Testing\RefreshDatabase;

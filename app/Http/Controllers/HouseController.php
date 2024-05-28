@@ -3,18 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Models\House;
-use App\Models\Property;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
-use App\Http\Requests\HouseRequest;
-use App\Http\Requests\HouseUpdateRequest;
-use App\Traits\Upload;
-use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Storage;
-
+use App\Http\Requests\SaveUpdateRequest;
+use App\Http\Requests\SaveRequest;
 class HouseController extends Controller
 {
-    use Upload;
     public function index(): View
     {
         $houses = House::all();
@@ -27,32 +21,16 @@ class HouseController extends Controller
         return view('house.create');
     }
 
-    public function store(HouseRequest $request): RedirectResponse
+    public function store(SaveRequest $request): RedirectResponse
     {
         $house = House::create($request->validated());
 
-        $property = new Property([
-            $request->validated(),
+        $request->merge([
             'property_id' => $house->id,
             'type' => House::class,
-            'city_id' => $request->validated(['city_id']),
-            'description' => $house->description,
-            'light' => $request->validated(['light']),
-            'natural_gas' => $request->validated(['natural_gas']),
-            'phone' => $request->validated(['phone']),
-            'water' => $request->validated(['water']),
-            'sewers' => $request->validated(['sewers']),
-            'internet' => $request->validated(['internet']),
-            'asphalt' => $request->validated(['asphalt'])
         ]);
 
-       if ($request->hasFile('images')){
-        $images = $request->images;
-        $propertyId = $property->property_id;
-        $this->uploadfile($propertyId, $images);
-       }
-
-        app(PropertyController::class)->store($property);
+        app(PropertyController::class)->store($request);
         
         return redirect()->route('house.index')->with('success', 'House published successfully!');
     }
@@ -70,37 +48,13 @@ class HouseController extends Controller
         return view('house.edit', compact('house','property','images'));
     }
 
-    public function update(HouseUpdateRequest $request, House $house): RedirectResponse
+    public function update(SaveUpdateRequest $request, House $house): RedirectResponse
     {
-        $house->update([
-            'title' => $request->validated(['title']),
-            'description' => $request->validated(['description']),
-            'price' => $request->validated(['price']),
-            'total_area' => $request->validated(['total_area']),
-            'covered_area' => $request->validated(['covered_area']),
-            'rooms_number' => $request->validated(['rooms_number']),
-        ]);
-
+        $house->update($request->toArray());
         $property = $house->property;
         if ($property) {
-            
-            $property->description = $house->description;
-            $property->light = $request->validated(['light']);
-            $property->natural_gas = $request->validated(['natural_gas']);
-            $property->phone = $request->validated(['phone']);
-            $property->water = $request->validated(['water']);
-            $property->sewers = $request->validated(['sewers']);
-            $property->internet = $request->validated(['internet']);
-            $property->asphalt = $request->validated(['asphalt']);
+            app(PropertyController::class)->update($request,$property);
         }
-        
-        if ($request->hasFile('images')){
-            $images = $request->file('images');
-            $propertyId = $property->property_id;
-            $this->uploadfile($propertyId, $images);
-        }
-
-        app(PropertyController::class)->update($property);
         
         return redirect()->route('house.index')->with('success', 'House updated successfully!');
     }
@@ -111,17 +65,7 @@ class HouseController extends Controller
 
         $property = $house->property;
         if ($property) {
-            $propertyImages = $property->images;
-            if ($propertyImages){
-                foreach($propertyImages as $propertyImage){
-                $directory = Storage::allFiles(config('app.PUBLIC_IMAGES_PATH').$propertyImage->property_id);
-                Storage::delete($directory);
-                $propertyImage->delete();
-                }
-                $directoryPath = config('app.PUBLIC_IMAGES_PATH').$property->property_id;
-                Storage::deleteDirectory($directoryPath);
-            }
-            $property->delete();
+            app(PropertyController::class)->destroy($property);
         }
 
         $house->delete();

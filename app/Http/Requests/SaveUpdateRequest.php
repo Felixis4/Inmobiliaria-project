@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class HouseRequest extends FormRequest
+class SaveUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,13 +22,14 @@ class HouseRequest extends FormRequest
     public function rules(): array
     {
         return [
+            //house
             'title' => 'required|max:255',
             'description' => 'required|string',
             'price' => 'required|numeric',
             'total_area' => 'required|numeric',
             'covered_area' => 'required|numeric',
             'rooms_number' => 'required|integer',
-            'city_id' => 'required|exists:cities,id',
+            //property
             'light' => 'boolean',
             'natural_gas' => 'boolean',
             'phone' => 'boolean',

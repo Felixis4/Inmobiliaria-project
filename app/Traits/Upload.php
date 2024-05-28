@@ -2,20 +2,11 @@
 
 namespace App\Traits;
 
-use App\Http\Requests\ImageRequest;
 use App\Models\propertyImages;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
 
 trait Upload {
     public function uploadfile($propertyId, $images){
-
-        $imageRequest = new ImageRequest();
-        $imageValidator = Validator::make(['images.*' => $images], $imageRequest->rules());
-
-        if ($imageValidator->fails()) {
-            return redirect()->back()->withErrors($imageValidator);
-        }
 
         foreach($images as $image){
 
