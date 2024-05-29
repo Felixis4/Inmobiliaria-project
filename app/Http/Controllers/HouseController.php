@@ -7,12 +7,12 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\SaveUpdateRequest;
 use App\Http\Requests\SaveRequest;
+
 class HouseController extends Controller
 {
     public function index(): View
     {
         $houses = House::all();
-        
         return view('house.houses', compact('houses'));
     }
 
