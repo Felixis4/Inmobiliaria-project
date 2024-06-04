@@ -1,5 +1,5 @@
 # Inmobiliaria Project
-Este es un sistema de inmobiliaria en el cual se puede añadir, editar y eliminar propiedades.
+Simple real state system in which you can Create, Read, Update and Delete diferent type of properties. 
 ## Dependencies 
 - PHP 8.1
 - Laravel 10x
@@ -9,15 +9,17 @@ Este es un sistema de inmobiliaria en el cual se puede añadir, editar y elimina
 ## Download and migrate the repository
 open your terminal and copy this. 
 
-$'git clone https://github.com/Felixis4/Inmobiliaria-project.git'
-
+~~~
+$git clone https://github.com/Felixis4/Inmobiliaria-project.git
+~~~
 configure your .env with your database
 
 run this for migrate
-
-$'php artisan migrate'
-
+~~~
+$php artisan migrate
+~~~
 ## Open localhost
 run this command on your terminal 
-
-$'php artisan serve' 
+~~~
+$php artisan serve
+~~~
