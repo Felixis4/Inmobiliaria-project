@@ -10,16 +10,16 @@ Simple real state system in which you can Create, Read, Update and Delete difere
 open your terminal and copy this. 
 
 ~~~
-$git clone https://github.com/Felixis4/Inmobiliaria-project.git
+git clone https://github.com/Felixis4/Inmobiliaria-project.git
 ~~~
 configure your .env with your database
 
 run this for migrate
 ~~~
-$php artisan migrate
+php artisan migrate
 ~~~
 ## Open localhost
 run this command on your terminal 
 ~~~
-$php artisan serve
+php artisan serve
 ~~~
