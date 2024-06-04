@@ -7,6 +7,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\SaveUpdateRequest;
 use App\Http\Requests\SaveRequest;
+use App\Models\Property;
 
 class HouseController extends Controller
 {
@@ -23,6 +24,8 @@ class HouseController extends Controller
 
     public function store(SaveRequest $request): RedirectResponse
     {
+        // $proerty = Property::factory(20)->create();
+
         $house = House::create($request->validated());
 
         $request->merge([

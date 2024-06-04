@@ -23,6 +23,8 @@ class JsonRequest extends FormRequest
     public function rules(): array
     {
         return [
+            //house
+            'id' => 'numeric',
             'priceFrom' => 'numeric',
             'price' => 'numeric',
             'priceTo' => 'numeric',
@@ -35,8 +37,18 @@ class JsonRequest extends FormRequest
             'numberRoomsFrom' => 'numeric',
             'numberRooms' => 'numeric',
             'numberRoomsTo' => 'numeric',
-            'sortBy' => Rule::in(['price','covered_area','total_area','id','rooms_number']),
-            'sortOrder' => Rule::in(['asc','desc']),
+            //property
+            'cityId' =>'numeric',
+            'type' =>'string',
+            'light' => 'string',
+            'naturalGas' =>'string',
+            'phone' => 'string',
+            'water' => 'string',
+            'sewers' => 'string',
+            'internet' => 'string',
+            'asphalt' => 'string',
+            'sortBy' => Rule::in(['price','covered_area','total_area','id','rooms_number','type','city_id','light','water','sewers','asphalt','internet','natural_gas','phone']),
+
         ];
     }
 }

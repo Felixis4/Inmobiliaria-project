@@ -19,20 +19,20 @@ class PropertyFactory extends Factory
     public function definition(): array
     {
         $house = House::factory()->create();
-        $city = City::create(['name'=>'Villa Gral Belgrano']);
+        // $city = City::create(['name'=>'Villa Gral Belgrano']);
 
         return [
             'property_id' => $house->id,
             'type' => House::class,
-            'city_id' => $city->id,
+            'city_id' => rand(1,3),
             'description' => $house->description,
-            'light' => 0,
-            'natural_gas' => 0,
-            'phone' => 0,
-            'water' => 1,
-            'sewers' => 0,
-            'internet' => 0,
-            'asphalt' => 1,
+            'light' => rand(0,1),
+            'natural_gas' => rand(0,1),
+            'phone' => rand(0,1),
+            'water' => rand(0,1),
+            'sewers' => rand(0,1),
+            'internet' => rand(0,1),
+            'asphalt' => rand(0,1),
         ];
     }
 }

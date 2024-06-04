@@ -22,6 +22,15 @@ class HouseResource extends JsonResource
             'covered_area' => $this->covered_area,
             'total_area' => $this->total_area,
             'rooms_number' => $this->rooms_number,
+            'city_id' => $this->property->city_id,
+            'type' => $this->property->type,
+            'light' => $this->property->light,
+            'natural_gas' => $this->property->natural_gas,
+            'phone' => $this->property->phone,
+            'water' => $this->property->water,
+            'sewers' => $this->property->sewers,
+            'internet' => $this->property->internet,
+            'asphalt' => $this->property->asphalt,
         ];
     }
 }

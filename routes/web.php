@@ -14,7 +14,7 @@ Route::get('/', function () {
     return view('index');
 });
 
-Route::get('/Json', [JsonResponseController::class, 'index']);
+Route::get('/json', [JsonResponseController::class, 'index']);
 
 Route::get('/properties/create', [PropertyController::class, 'create'])->name('properties.create');
 Route::post('/properties/type', [PropertyController::class, 'redirector'])->name('properties.redirector');
