@@ -6,7 +6,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <title>@yield('title', 'Home')</title>
 </head>
-<body class="bg-gray-600 flex items-center justify-center h-1/2">
+<body class="bg-gray-600 items-center justify-center h-1/2">
     @yield('content')
 </body>
 </html>
