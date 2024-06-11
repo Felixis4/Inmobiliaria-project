@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Auth::routes();
+
 Route::middleware(['auth'])->group(function () {
     Route::get('/info', function () {
         return phpinfo();
@@ -18,7 +19,6 @@ Route::middleware(['auth'])->group(function () {
         return view('index');
     });
 
-    Route::get('/json', [JsonResponseController::class, 'index']);
 
     Route::get('/properties/create', [PropertyController::class, 'create'])->name('properties.create');
     Route::post('/properties/type', [PropertyController::class, 'redirector'])->name('properties.redirector');
@@ -28,6 +28,9 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/images/edit/{property_id}',[ImageController::class,'edit'])->name('images.edit');
     Route::delete('/images/delete/{imageId}', [ImageController::class, 'destroy'])->name('image.delete');
+
     Route::get('/home', [HomeController::class, 'index'])->name('home');
 });
+
+    Route::get('/json', [JsonResponseController::class, 'index']);
 
