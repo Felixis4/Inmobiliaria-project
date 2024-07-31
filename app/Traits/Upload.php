@@ -12,7 +12,7 @@ trait Upload {
 
             $filename = Str::random(5).$image->getClientOriginalName();
 
-            $path = $image->storeAs('images/'.$propertyId,$filename,config('filesystems.public'));
+            $path = $image->storeAs('P-images/'.$propertyId,$filename,config('filesystems.public'));
 
             $fullPath = storage_path(config('app.PUBLIC_PATH').$path);
 

@@ -9,7 +9,7 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 
 //  entra al index, crear propiedad lo redirige a elegir tipo propiedad y ciudad
-//  al elegirlo lo redirecciona a crear propiedad segun el tipo de propiedad
+//  al elegirlo lo redirecciona a crear propiedad según el tipo de propiedad
 //  lo redirecciona a lista de propiedades del mismo tipo
 class CRUDTest extends TestCase
 {

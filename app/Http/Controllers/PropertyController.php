@@ -14,12 +14,16 @@ use Illuminate\Support\Facades\Storage;
 class PropertyController extends Controller
 {
     use Upload;
-    public function create(): View
+    public function property_selector(): View
     {
+        $page_title = 'Add Property';
+        $page_description = 'Some description for the page';
         $cities = City::all();
         $types = ['house' => 'House', 'department' => 'Department'];
         
-        return view('properties_selector', compact('cities', 'types'));
+		$action = __FUNCTION__;
+
+        return view('def.forms.properties_selector', compact('page_title', 'page_description','action','cities','types'));
     }
 
     public function redirector(PropertyRequest $request): RedirectResponse

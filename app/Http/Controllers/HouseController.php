@@ -14,12 +14,17 @@ class HouseController extends Controller
     public function index(): View
     {
         $houses = House::all();
-        return view('house.houses', compact('houses'));
+        return view('def.propertiesTable', compact('houses'));
     }
 
     public function create(): View
     {
-        return view('house.create');
+        $page_title = 'House';
+        $page_description = 'Some description for the page';
+
+		$action = "create_house";
+
+        return view('def.forms.house.create',compact('page_title', 'page_description','action'));
     }
 
     public function store(SaveRequest $request): RedirectResponse
@@ -35,20 +40,25 @@ class HouseController extends Controller
 
         app(PropertyController::class)->store($request);
         
-        return redirect()->route('house.index')->with('success', 'House published successfully!');
+        return redirect()->route('properties')->with('success', 'House published successfully!');
+
     }
 
     public function show(House $house): View
     {
         $images = $house->property->images;
-        return view('house.show', compact('house','images'));
+        return view('def.forms.house.show', compact('house','images'));
     }
 
     public function edit(House $house): View
     {
+        $page_title = 'House';
+        $page_description = 'Some description for the page';
+		$action = "create_house";
+
         $property = $house->property;
         $images = $house->property->images;
-        return view('house.edit', compact('house','property','images'));
+        return view('def.forms.house.edit', compact('house','property','images','page_title','page_description','action'));
     }
 
     public function update(SaveUpdateRequest $request, House $house): RedirectResponse
@@ -59,7 +69,7 @@ class HouseController extends Controller
             app(PropertyController::class)->update($request,$property);
         }
         
-        return redirect()->route('house.index')->with('success', 'House updated successfully!');
+        return redirect()->route('properties')->with('success', 'House updated successfully!');
     }
 
     public function destroy($id): RedirectResponse
@@ -73,6 +83,6 @@ class HouseController extends Controller
 
         $house->delete();
 
-        return redirect()->route('house.index')->with('success', 'House and associated property deleted successfully!');
+        return redirect()->route('properties')->with('success', 'House and associated property deleted successfully!');
     }
 }
